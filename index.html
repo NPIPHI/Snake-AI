@@ -1,5 +1,24 @@
-<div></div>
-<script src ="keyboard.js"></script>
-<script src ="snake.js"></script>
-<script src = "network.js"></script>
-<script src="main.js"></script>
+<head></head>
+<body>
+    <style>
+        html {
+            overflow-y: hidden;
+        }
+    </style>
+    <div>
+        <p>Speed:
+            <input id = "speedInput" type = "number" min = "1" value = "1">
+        </p>
+        <p>
+            This is a genetic algorithm that learns how to play snake. It's only inputs are the direction of the fruit and if their are obsticles to its left, right, or front.
+        </p>
+        <p>
+            Set the speed to 10000 and watch it figure out how to play snake.
+        </p>
+    </div>
+    <canvas id = "canvas"></canvas>
+    <script src ="keyboard.js"></script>
+    <script src ="snake.js"></script>
+    <script src = "network.js"></script>
+    <script src="main.js"></script>
+</body>

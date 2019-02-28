@@ -48,7 +48,6 @@ class Snake{
         this.update();
     }
     draw(){
-        ctx.clearRect(this.map.x,this.map.y,this.map.width*this.map.cellSize,this.map.height*this.map.cellSize);
         ctx.strokeRect(this.map.x,this.map.y,this.map.width*this.map.cellSize,this.map.height*this.map.cellSize);
         for(let i = 0; i < this.map.mapArray.length; i ++){
             ctx.fillStyle = (this.dead)?'red':'black';

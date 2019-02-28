@@ -3,13 +3,13 @@ window.addEventListener('resize', evt=>{
     canvas.height = window.innerHeight;
 });
 function inti(){
-    canvas = document.createElement('canvas');
+    canvas = document.getElementById('canvas');
     canvas.style.position='absolute';
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight*(5/6);
     canvas.style.left='0px';
-    canvas.style.top='0px';
-    document.body.appendChild(canvas);
+    canvas.style.top='100px';
+    speedInput = document.getElementById("speedInput");
     fitGraph = new Graph(0,500,100,400,[]);
     ctx = canvas.getContext("2d");
     let n = Network.generate(7,3);
@@ -21,7 +21,8 @@ function inti(){
     loop();
 }
 function loop(){
-    for(let af = 0; af < 1; af ++){
+    setSpeed();
+    for(let iteration = 0; iteration < speed; iteration ++){
         let allDead = true;
         snakes.forEach((s)=>{
             if(!s.dead){
@@ -30,65 +31,76 @@ function loop(){
             }
         });
         if(allDead){
-            let sorted = false;
-            for(let i = snakes.length-1; i >= 0&&!sorted; i --){
-                sorted = true;
-                for(let j = 0; j < i; j++){
-                    if(this.snakes[j].fitness<snakes[j+1].fitness){
-                        let buf = snakes[j];
-                        snakes[j] = snakes[j+1];
-                        snakes[j+1] = buf;
-                        sorted = false;
-                    }
-                }
-            }
-            fitGraph.addPoint(this.snakes[0].fitness);
-            /*nets[0]=snakes[0].network;
-            nets[1]=snakes[1].network;
-            nets[2]=snakes[2].network;
-            nets[3]=snakes[3].network;
-            nets[4]=snakes[0].network.crossover(snakes[1].network);
-            nets[5]=snakes[0].network.crossover(snakes[2].network);
-            nets[6]=snakes[0].network.crossover(snakes[3].network);
-            nets[7]=snakes[1].network.crossover(snakes[2].network);
-            nets[8]=snakes[1].network.crossover(snakes[3].network);
-            nets[9]=snakes[2].network.crossover(snakes[2].network);
-            nets[4].mutate();
-            nets[5].mutate();
-            nets[6].mutate();
-            nets[7].mutate();
-            nets[8].mutate();
-            nets[9].mutate();*/
-            nets[0]=snakes[0].network.clone();
-            nets[1]=snakes[0].network.clone();
-            nets[2]=snakes[0].network.clone();
-            nets[3]=snakes[0].network.clone();
-            nets[4]=snakes[1].network.clone();
-            nets[5]=snakes[1].network.clone();
-            nets[6]=snakes[1].network.clone();
-            nets[7]=snakes[2].network.clone();
-            nets[8]=snakes[2].network.clone();
-            nets[9]=snakes[3].network.clone();
-        
-
-            for(let i = 1; i < nets.length; i++){
-                nets[i].mutate();
-            }
-            snakes = [];
-            for(let i = 0; i < numSnakes; i++){
-                snakes.push(new Snake(Math.floor(mWidth/2),Math.floor(mHeight/2),4,Math.floor((i%simWidth)*window.innerWidth/simWidth),Math.floor((i/simWidth))*window.innerWidth/simWidth,mWidth,mHeight, window.innerWidth/(simWidth*mWidth),nets[i]));
-            }
+            newGeneration();
             frameNum = 0;
         } else {
             frameNum ++;
         }
     }
-    fitGraph.draw();
+    //fitGraph.draw();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
     snakes.forEach(s=>{
         s.draw();
     });
     //drawFitnessGraph(500,500,200,200);
     requestAnimationFrame(loop);
+}
+
+function setSpeed(){
+    if(speedInput.value>=1){
+        speed = Math.min(speedInput.value,10000);
+    }
+}
+
+function newGeneration(){
+    let sorted = false;
+    for(let i = snakes.length-1; i >= 0&&!sorted; i --){
+        sorted = true;
+        for(let j = 0; j < i; j++){
+            if(this.snakes[j].fitness<snakes[j+1].fitness){
+                let buf = snakes[j];
+                snakes[j] = snakes[j+1];
+                snakes[j+1] = buf;
+                sorted = false;
+            }
+        }
+    }
+    fitGraph.addPoint(this.snakes[0].fitness);
+    /*nets[0]=snakes[0].network;
+    nets[1]=snakes[1].network;
+    nets[2]=snakes[2].network;
+    nets[3]=snakes[3].network;
+    nets[4]=snakes[0].network.crossover(snakes[1].network);
+    nets[5]=snakes[0].network.crossover(snakes[2].network);
+    nets[6]=snakes[0].network.crossover(snakes[3].network);
+    nets[7]=snakes[1].network.crossover(snakes[2].network);
+    nets[8]=snakes[1].network.crossover(snakes[3].network);
+    nets[9]=snakes[2].network.crossover(snakes[2].network);
+    nets[4].mutate();
+    nets[5].mutate();
+    nets[6].mutate();
+    nets[7].mutate();
+    nets[8].mutate();
+    nets[9].mutate();*/
+    nets[0]=snakes[0].network.clone();
+    nets[1]=snakes[0].network.clone();
+    nets[2]=snakes[0].network.clone();
+    nets[3]=snakes[0].network.clone();
+    nets[4]=snakes[1].network.clone();
+    nets[5]=snakes[1].network.clone();
+    nets[6]=snakes[1].network.clone();
+    nets[7]=snakes[2].network.clone();
+    nets[8]=snakes[2].network.clone();
+    nets[9]=snakes[3].network.clone();
+
+
+    for(let i = 1; i < nets.length; i++){
+        nets[i].mutate();
+    }
+    snakes = [];
+    for(let i = 0; i < numSnakes; i++){
+        snakes.push(new Snake(Math.floor(mWidth/2),Math.floor(mHeight/2),4,Math.floor((i%simWidth)*window.innerWidth/simWidth),Math.floor((i/simWidth))*window.innerWidth/simWidth,mWidth,mHeight, window.innerWidth/(simWidth*mWidth),nets[i]));
+    }
 }
 class Graph{
     constructor(x,y,width, height, dataPts){
@@ -134,4 +146,6 @@ var simWidth = 5;
 var frameNum = 0;
 var mWidth = 40;
 var mHeight = 40;
+var speed = 1;
+var speedInput;
 inti();
