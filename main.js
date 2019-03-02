@@ -8,7 +8,7 @@ function inti(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight*(5/6);
     canvas.style.left='0px';
-    canvas.style.top='100px';
+    canvas.style.top='120px';
     speedInput = document.getElementById("speedInput");
     fitGraph = new Graph(0,500,100,400,[]);
     ctx = canvas.getContext("2d");
