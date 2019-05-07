@@ -3,7 +3,7 @@ a genetic algorithm playing snake
 
 ## How it works
 
-A genetic algorithm works by creating random mutatiion in a population and choosing the fittest members to survive and reproduce
+A genetic algorithm works by creating random mutation in a each member of a population and choosing the fittest members to survive and reproduce
 
 This demo had 7 entry nodes and 3 output nodes.
 The fitness is determined mosly by how many fruits the snake eats.
